@@ -15,4 +15,4 @@ Example code [Left Wall Follow](https://github.com/mackorone/mms-c)
 
 For home use/experimenting [STM32F411CEU6](https://robu.in/product/stm32f411ceu6-minimum-system-board-microcomputer-stm32-arm-core-board/)
 
-Most likey used in the bot [STM32H750VBT6](https://robu.in/product/weact-studio-stm32h750vbt6-lcd-demo-board-core-development-board/).
+Most likey used in the bot [STM32H750VBT6](https://robu.in/product/weact-studio-stm32h750vbt6-lcd-demo-board-core-development-board/)
