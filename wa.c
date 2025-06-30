@@ -32,27 +32,19 @@ void init_cell(struct cell_status **cell_stat, int rows, int cols) {
             cell_stat[i][j].bottom_wall = 0;
             cell_stat[i][j].left_wall = 0;
             cell_stat[i][j].right_wall = 0;
-            cell_stat[i][j].score = 1;
+            cell_stat[i][j].score = 0;
         }
 }
 
 void init_cell_score(struct cell_status **cell_stat, int rows, int cols) {
     int r2 = rows / 2, c2 = cols / 2;
     for(int i = 0; i < r2; i++)
-        for(int j = 0; j < c2; j++)
-            cell_stat[i][j].score += (i * j) + (i + j);
-
-    for(int i = rows - 1; i >= r2; i--)
-        for(int j = 0; j < c2; j++)
-            cell_stat[i][j].score = cell_stat[abs(i+1 - rows)][j].score;
-
-    for(int i = 0; i < r2; i++)
-        for(int j = cols - 1; j >= c2; j--)
-            cell_stat[i][j].score = cell_stat[i][abs(j+1 - cols)].score;
-
-    for(int i = rows - 1; i >= r2; i--)
-        for(int j = cols - 1; j >= c2; j--)
-            cell_stat[i][j].score = cell_stat[abs(i+1 - rows)][abs(j+1 - cols)].score;
+        for(int j = 0; j < c2; j++) {
+            cell_stat[i + r2][j + c2].score = i + j;
+            cell_stat[r2 - 1 - i][c2 - 1 - j].score = i + j;
+            cell_stat[r2 + i][c2 - 1 - j].score = i + j;
+            cell_stat[r2 - 1 - i][j + c2].score = i + j;
+        }
 }
 
 void init_tester(struct cell_status **cell_stat, int rows, int cols) {
@@ -122,15 +114,14 @@ void check_wall(struct cell_status **cell_stat, struct position pos) {
 void get_move(struct cell_status **cell_stat, struct position pos) 
 {
     int score_n = 0, score_s = 0, score_e = 0, score_w = 0;
-    if(pos.y < 15)
-        score_n = cell_stat[pos.x][pos.y+1].score * cell_stat[pos.x][pos.y].top_wall;
-    if(pos.y > 0)
-        score_s = cell_stat[pos.x][pos.y-1].score * cell_stat[pos.x][pos.y].bottom_wall;
-    if(pos.x > 0)
-        score_e = cell_stat[pos.x-1][pos.y].score * cell_stat[pos.x][pos.y].right_wall;
-    if(pos.x < 15)
-        score_w = cell_stat[pos.x+1][pos.y].score * cell_stat[pos.x][pos.y].left_wall;
-
+    if(pos.y < 15 && !cell_stat[pos.x][pos.y].top_wall)
+        score_n = cell_stat[pos.x][pos.y+1].score ;
+    if(pos.y > 0 && !cell_stat[pos.x][pos.y].bottom_wall)
+        score_s = cell_stat[pos.x][pos.y-1].score;
+    if(pos.x > 0 && !cell_stat[pos.x][pos.y].right_wall)
+        score_e = cell_stat[pos.x-1][pos.y].score;
+    if(pos.x < 15 && !cell_stat[pos.x][pos.y].left_wall)
+        score_w = cell_stat[pos.x+1][pos.y].score;  
 }
 
 int main(int argc, char* argv[]) {
